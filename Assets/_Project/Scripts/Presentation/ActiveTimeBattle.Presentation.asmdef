@@ -1,0 +1,12 @@
+{
+  "name": "ActiveTimeBattle.Presentation",
+  "rootNamespace": "ActiveTimeBattle.Presentation",
+  "references": [
+    "ActiveTimeBattle.Application",
+    "ActiveTimeBattle.Domain",
+    "UniTask",
+    "Unity.InputSystem",
+    "Unity.TextMeshPro"
+  ],
+  "autoReferenced": true
+}

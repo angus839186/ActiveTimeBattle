@@ -1,0 +1,6 @@
+{
+  "name": "ActiveTimeBattle.Domain",
+  "rootNamespace": "ActiveTimeBattle.Domain",
+  "references": [],
+  "autoReferenced": true
+}

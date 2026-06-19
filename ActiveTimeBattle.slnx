@@ -1,5 +1,10 @@
 ﻿<Solution>
+  <Project Path="ActiveTimeBattle.Domain.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="ActiveTimeBattle.Tests.csproj" />
+  <Project Path="ActiveTimeBattle.Presentation.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="ActiveTimeBattle.Application.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="ActiveTimeBattle.Editor.csproj" />
 </Solution>
