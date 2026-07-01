@@ -1,9 +1,0 @@
-{
-  "name": "ActiveTimeBattle.Application",
-  "rootNamespace": "ActiveTimeBattle.Application",
-  "references": [
-    "ActiveTimeBattle.Domain",
-    "UniTask"
-  ],
-  "autoReferenced": true
-}
