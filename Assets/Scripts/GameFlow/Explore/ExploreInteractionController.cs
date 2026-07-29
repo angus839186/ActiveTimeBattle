@@ -44,7 +44,7 @@ public class ExploreInteractionController : MonoBehaviour
         if (other.TryGetComponent(out IExploreInteractable interactable))
         {
             currentInteractable = interactable;
-            Debug.Log($"Enter interact range: {other.name}");
+            // Debug.Log($"Enter interact range: {other.name}");
         }
     }
 
@@ -54,7 +54,7 @@ public class ExploreInteractionController : MonoBehaviour
             interactable == currentInteractable)
         {
             currentInteractable = null;
-            Debug.Log($"Exit interact range: {other.name}");
+            // Debug.Log($"Exit interact range: {other.name}");
         }
     }
 }

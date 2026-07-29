@@ -48,7 +48,7 @@ public class BattleSceneController : MonoBehaviour
 
         if (CurrentBattleSession.Result == BattleResult.Victory)
         {
-            GameFlowController.Instance.CurrentRunSession.RecordBattleVictory();
+            GameFlowController.Instance.CurrentRunSession.CompletePendingBattle();
             ReturnToExplore();
         }
     }

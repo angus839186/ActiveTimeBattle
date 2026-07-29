@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class BattleNode : ExploreEventNode
 {
-    [SerializeField] private string encounterId = "test_battle_001";
 
     protected override void OnInteract()
     {
@@ -12,7 +11,20 @@ public class BattleNode : ExploreEventNode
             return;
         }
 
-        CompleteNode();
+        RunSession runSession = GameFlowController.Instance.CurrentRunSession;
+
+        if (runSession != null)
+        {
+            runSession.StartPendingBattle(RoomController.RoomId, NodeId);
+        }
+
+        ExplorePlayerController player = FindFirstObjectByType<ExplorePlayerController>();
+
+        if (runSession != null && player != null)
+        {
+            runSession.SetExploreReturnPosition(player.transform.position);
+        }
+
         GameFlowController.Instance.ChangeToBattle();
     }
 }

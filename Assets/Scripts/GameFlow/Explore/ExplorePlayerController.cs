@@ -62,6 +62,26 @@ public class ExplorePlayerController : MonoBehaviour
         characterController.Move(move * moveSpeed * Time.deltaTime);
     }
 
+    public void TeleportTo(Transform targetPoint)
+    {
+        if (targetPoint == null)
+        {
+            Debug.LogWarning("ExplorePlayerController: Target point is null.");
+            return;
+        }
+
+        characterController.enabled = false;
+        transform.position = targetPoint.position;
+        characterController.enabled = true;
+    }
+
+    public void TeleportTo(Vector3 position)
+    {
+        characterController.enabled = false;
+        transform.position = position;
+        characterController.enabled = true;
+    }
+
     private void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();

@@ -7,7 +7,7 @@ public class TestExploreNode : ExploreEventNode
     {
         if (GameFlowController.Instance == null)
         {
-            Debug.LogWarning("BattleNode: GameFlowController not found.");
+            Debug.LogWarning("testExploreNode: GameFlowController not found.");
             return;
         }
 
