@@ -12,14 +12,22 @@ public class RoomController : MonoBehaviour
 
     [SerializeField] private Transform nodeSpawnPoint;
     [SerializeField] private Transform nodeRoot;
-    [SerializeField] private ExploreNodePrefabEntry[] nodePrefabs;
+    [SerializeField] private ExploreNode nodePrefab;
 
-    [SerializeField] private RoomDoorTransition[] doorTransitions;
+    [SerializeField] private RoomCameraPoint cameraPoint;
 
-    private ExploreEventNode currentNode;
+
+    [SerializeField] private Transform playerSpawnPoint;
+
+    private ExploreMapController mapController;
+
+    private ExploreNode currentNode;
+    public bool IsCompleted { get; private set; }
+    public Transform PlayerSpawnPoint => playerSpawnPoint;
+
+    public RoomCameraPoint CameraPoint => cameraPoint;
 
     public string RoomId => roomId;
-    public bool IsCompleted { get; private set; }
 
     private void Start()
     {
@@ -84,6 +92,10 @@ public class RoomController : MonoBehaviour
         }
 
         OpenDoors();
+        if (mapController != null)
+        {
+            mapController.OpenConnectedDoors(this);
+        }
         Debug.Log($"Room completed: {roomId}");
     }
 
@@ -126,11 +138,9 @@ public class RoomController : MonoBehaviour
             currentNode = null;
         }
 
-        ExploreEventNode prefab = GetNodePrefab(roomData.NodeType);
-
-        if (prefab == null)
+        if (nodePrefab == null)
         {
-            Debug.LogWarning($"RoomController: Node prefab not assigned for type: {roomData.NodeType}");
+            Debug.LogWarning("RoomController: Node prefab is not assigned.");
             return;
         }
 
@@ -138,35 +148,33 @@ public class RoomController : MonoBehaviour
         Vector3 spawnPosition = nodeSpawnPoint != null ? nodeSpawnPoint.position : transform.position;
         Quaternion spawnRotation = nodeSpawnPoint != null ? nodeSpawnPoint.rotation : Quaternion.identity;
 
-        currentNode = Instantiate(prefab, spawnPosition, spawnRotation, spawnParent);
-        currentNode.Activate(roomData.NodeId, this);
-    }
-    private ExploreEventNode GetNodePrefab(ExploreNodeType nodeType)
-    {
-        if (nodePrefabs == null)
-        {
-            return null;
-        }
-
-        foreach (ExploreNodePrefabEntry entry in nodePrefabs)
-        {
-            if (entry != null && entry.NodeType == nodeType)
-            {
-                return entry.Prefab;
-            }
-        }
-
-        return null;
+        currentNode = Instantiate(nodePrefab, spawnPosition, spawnRotation, spawnParent);
+        currentNode.Activate(roomData.NodeId, roomData.NodeType, this);
     }
 
-    public void InitializeDoorTransitions(ExploreMapSpawner mapSpawner)
+    public void InitializeDoors(ExploreMapController mapController)
     {
-        foreach (RoomDoorTransition doorTransition in doorTransitions)
+        this.mapController = mapController;
+
+        foreach (RoomDoor door in doors)
         {
-            if (doorTransition != null)
+            if (door != null)
             {
-                doorTransition.Initialize(mapSpawner);
+                door.Initialize(mapController);
             }
         }
     }
+    public void OpenDoor(DoorDirectionType direction)
+    {
+        foreach (RoomDoor door in doors)
+        {
+            if (door != null && door.Direction == direction)
+            {
+                door.Open();
+                return;
+            }
+        }
+    }
+
+    
 }

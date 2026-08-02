@@ -2,26 +2,20 @@ using UnityEngine;
 
 public class BattleSceneController : MonoBehaviour
 {
+    [SerializeField] private BattleEnemyDefinition testEnemyDefinition;
+    [SerializeField] private int basePlayerHp = 100;
     public BattleSession CurrentBattleSession { get; private set; }
     private void Start()
     {
-        CurrentBattleSession = new BattleSession(playerHp: 100, enemyHp: 50);
-        Debug.Log("BattleSession created. Player HP: 100, Enemy HP: 50");
+        RunSession runSession = GameFlowController.Instance?.CurrentRunSession;
+        int playerHp = runSession != null ? runSession.PlayerCurrentHp : 100;
+
+        CurrentBattleSession = new BattleSession(playerHp, testEnemyDefinition);
         GameFlowController gameFlow = GameFlowController.Instance;
 
-        if (gameFlow == null)
-        {
-            Debug.LogWarning("BattleSceneController: GameFlowController not found.");
-            return;
-        }
+        if (gameFlow == null) return;
 
-        RunSession runSession = gameFlow.CurrentRunSession;
-
-        if (runSession == null || !runSession.IsActive)
-        {
-            Debug.LogWarning("BattleSceneController: No active run session.");
-            return;
-        }
+        if (runSession == null || !runSession.IsActive) return;
 
         Debug.Log($"Battle started. Class: {runSession.SelectedClassId}, Seed: {runSession.Seed}");
     }
@@ -33,6 +27,7 @@ public class BattleSceneController : MonoBehaviour
             return;
         }
 
+        GameFlowController.Instance.CurrentRunSession.SetPlayerHp(CurrentBattleSession.PlayerHp);
         GameFlowController.Instance.ChangeToExplore();
     }
 

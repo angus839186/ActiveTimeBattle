@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RewardNode : ExploreEventNode
+public class RewardNode : ExploreNode
 {
     protected override void OnInteract()
     {

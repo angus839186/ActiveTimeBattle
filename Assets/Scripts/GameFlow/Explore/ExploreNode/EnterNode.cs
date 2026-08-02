@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnterNode : ExploreEventNode
+public class EnterNode : ExploreNode
 {
     protected override void OnActivated()
     {

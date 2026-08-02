@@ -8,6 +8,8 @@ public class ExploreInteractionController : MonoBehaviour
     private InputAction interactAction;
     private IExploreInteractable currentInteractable;
 
+    public string CurrentInteractableName { get; private set; } = "None";
+
     private void Awake()
     {
         if (playerInput == null)
@@ -44,7 +46,7 @@ public class ExploreInteractionController : MonoBehaviour
         if (other.TryGetComponent(out IExploreInteractable interactable))
         {
             currentInteractable = interactable;
-            // Debug.Log($"Enter interact range: {other.name}");
+            CurrentInteractableName = other.name;
         }
     }
 
@@ -54,7 +56,7 @@ public class ExploreInteractionController : MonoBehaviour
             interactable == currentInteractable)
         {
             currentInteractable = null;
-            // Debug.Log($"Exit interact range: {other.name}");
+            CurrentInteractableName = "None";
         }
     }
 }

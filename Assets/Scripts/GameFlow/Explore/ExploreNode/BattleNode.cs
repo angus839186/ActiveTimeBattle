@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BattleNode : ExploreEventNode
+public class BattleNode : ExploreNode
 {
 
     protected override void OnInteract()

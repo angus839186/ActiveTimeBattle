@@ -1,27 +1,44 @@
 using UnityEngine;
-
-public class RoomDoor : MonoBehaviour
+public enum DoorDirectionType
+{
+    Left,
+    Right,
+    Top,
+    Down
+}
+public class RoomDoor : MonoBehaviour, IExploreInteractable
 {
     [SerializeField] private DoorDirectionType direction;
     public DoorDirectionType Direction => direction;
-    [SerializeField] private GameObject doorVisual;
-    [SerializeField] private Collider doorCollider;
+    [SerializeField] private GameObject doorObject;
 
     [SerializeField] private string connectedRoomId;
+
+    [SerializeField] private ExploreMapController mapSpawner;
 
     public string ConnectedRoomId => connectedRoomId;
 
     private bool isOpen;
 
     public bool IsOpen => isOpen;
+    private bool isAvailable;
 
     private void Awake()
     {
         Close();
     }
 
+    public void Initialize(ExploreMapController mapSpawner)
+    {
+        this.mapSpawner = mapSpawner;
+    }
+
     public void Open()
     {
+        if (!isAvailable)
+        {
+            return;
+        }
         if (isOpen)
         {
             return;
@@ -29,14 +46,9 @@ public class RoomDoor : MonoBehaviour
 
         isOpen = true;
 
-        if (doorVisual != null)
+        if (doorObject != null)
         {
-            doorVisual.SetActive(false);
-        }
-
-        if (doorCollider != null)
-        {
-            doorCollider.enabled = false;
+            doorObject.SetActive(false);
         }
 
         // Debug.Log($"Door opened: {direction}");
@@ -46,14 +58,9 @@ public class RoomDoor : MonoBehaviour
     {
         isOpen = false;
 
-        if (doorVisual != null)
+        if (doorObject != null)
         {
-            doorVisual.SetActive(true);
-        }
-
-        if (doorCollider != null)
-        {
-            doorCollider.enabled = true;
+            doorObject.SetActive(true);
         }
 
         // Debug.Log($"Door closed: {direction}");
@@ -61,11 +68,27 @@ public class RoomDoor : MonoBehaviour
 
     public void SetAvailable(bool isAvailable)
     {
+        this.isAvailable = isAvailable;
         gameObject.SetActive(isAvailable);
     }
 
     public void SetConnectedRoom(string roomId)
     {
         connectedRoomId = roomId;
+    }
+    public void Interact()
+    {
+        if (string.IsNullOrEmpty(connectedRoomId))
+        {
+            Debug.LogWarning("RoomDoor: ConnectedRoomId is empty.");
+            return;
+        }
+
+        if (!isOpen)
+        {
+            return;
+        }
+
+        mapSpawner.ApplyRoom(connectedRoomId, direction);
     }
 }

@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class RunSession
 {
+    public PlayerClassDefinition SelectedClass { get; private set; }
+
+    public ExploreMapData ExploreMap { get; private set; }
     public string SelectedClassId { get; private set; }
 
     public string CurrentExploreRoomId { get; private set; }
@@ -10,9 +13,6 @@ public class RunSession
     public bool IsActive { get; private set; }
     public int BattlesWon { get; private set; }
 
-    public PlayerClassDefinition SelectedClass { get; private set; }
-
-    public ExploreMapData ExploreMap { get; private set; }
     public string PendingBattleRoomId { get; private set; }
     public string PendingBattleNodeId { get; private set; }
     public bool HasPendingBattle => !string.IsNullOrEmpty(PendingBattleNodeId);
@@ -22,6 +22,15 @@ public class RunSession
 
     public bool HasExploreReturnPosition { get; private set; }
     public Vector3 ExploreReturnPosition { get; private set; }
+
+    public int PlayerMaxHp { get; private set; }
+    public int PlayerCurrentHp { get; private set; }
+
+    public float PlayerHpRate => PlayerMaxHp > 0
+    ? (float)PlayerCurrentHp / PlayerMaxHp
+    : 0f;
+
+    public IReadOnlyCollection<string> CompletedNodes => completedNodes;
 
 
 
@@ -61,6 +70,8 @@ public class RunSession
 
         HasExploreReturnPosition = false;
         ExploreReturnPosition = Vector3.zero;
+        PlayerMaxHp = 100;
+        PlayerCurrentHp = PlayerMaxHp;
     }
 
     public bool IsNodeCompleted(string nodeId)
@@ -129,6 +140,9 @@ public class RunSession
         HasExploreReturnPosition = false;
     }
 
-
+    public void SetPlayerHp(int currentHp)
+    {
+        PlayerCurrentHp = Mathf.Clamp(currentHp, 0, PlayerMaxHp);
+    }
 
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TestExploreNode : ExploreEventNode
+public class TestExploreNode : ExploreNode
 {
 
     protected override void OnInteract()
