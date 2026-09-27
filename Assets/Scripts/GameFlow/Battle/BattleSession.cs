@@ -16,10 +16,18 @@ public class BattleSession
     public int EnemyAttackPower => EnemyDefinition != null ? EnemyDefinition.AttackPower : 0;
     public float EnemyAttackCooldown => EnemyDefinition != null ? EnemyDefinition.AttackCooldown : 0f;
 
+    public float EnemyAttackCooldownRemaining { get; private set; }
+    public float EnemyAttackCooldownRate => EnemyAttackCooldown > 0f
+        ? EnemyAttackCooldownRemaining / EnemyAttackCooldown
+        : 0f;
+
+    public bool IsEnemyAttackReady => EnemyAttackCooldownRemaining <= 0f;
+
     public BattleSession(int playerHp, BattleEnemyDefinition enemyDefinition)
     {
         PlayerHp = playerHp;
         EnemyDefinition = enemyDefinition;
+        EnemyAttackCooldownRemaining = EnemyAttackCooldown;
         EnemyHp = enemyDefinition != null ? enemyDefinition.MaxHp : 1;
     }
 
@@ -44,5 +52,42 @@ public class BattleSession
 
             return BattleResult.None;
         }
+    }
+    public void TickEnemyAttackCooldown(float deltaTime)
+    {
+        if (IsFinished)
+        {
+            return;
+        }
+
+        EnemyAttackCooldownRemaining = Mathf.Max(0f, EnemyAttackCooldownRemaining - deltaTime);
+    }
+
+    public void ResetEnemyAttackCooldown()
+    {
+        EnemyAttackCooldownRemaining = EnemyAttackCooldown;
+    }
+
+    public void TakeDamageToPlayer(int damage)
+    {
+        PlayerHp = Mathf.Max(0, PlayerHp - damage);
+        Debug.Log($"Player HP: {PlayerHp}");
+    }
+
+    public void ApplyEnemyAttack(DefenseQTEResult qteResult)
+    {
+        int damage = EnemyAttackPower;
+
+        if (qteResult == DefenseQTEResult.PerfectGuard)
+        {
+            damage = 0;
+        }
+        else if (qteResult == DefenseQTEResult.Guard)
+        {
+            damage = Mathf.CeilToInt(EnemyAttackPower * 0.5f);
+        }
+
+        TakeDamageToPlayer(damage);
+        ResetEnemyAttackCooldown();
     }
 }

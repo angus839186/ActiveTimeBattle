@@ -15,7 +15,14 @@ public class BattleNode : ExploreNode
 
         if (runSession != null)
         {
-            runSession.StartPendingBattle(RoomController.RoomId, NodeId);
+            BattleType battleType = NodeType == ExploreNodeType.EliteBattle
+            ? BattleType.Elite
+            : BattleType.Normal;
+
+            runSession.StartPendingBattle(
+                RoomController.RoomId,
+                NodeId,
+                battleType);
         }
 
         ExplorePlayerController player = FindFirstObjectByType<ExplorePlayerController>();

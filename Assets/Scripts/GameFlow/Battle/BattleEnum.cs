@@ -20,3 +20,8 @@ public enum DefenseQTEResult
     Guard,
     Fail
 }
+public enum BattleType
+{
+    Normal,
+    Elite
+}

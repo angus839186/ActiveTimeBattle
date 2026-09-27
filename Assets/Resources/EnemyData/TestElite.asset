@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07442b20860a4fb41b5f3657d001c785, type: 3}
-  m_Name: TestEnemy
+  m_Name: TestElite
   m_EditorClassIdentifier: Assembly-CSharp::BattleEnemyDefinition
-  enemyName: enemy
-  maxHp: 50
-  attackPower: 4
-  attackCooldown: 2
+  enemyName: EliteEnemy
+  maxHp: 500
+  attackPower: 25
+  attackCooldown: 10

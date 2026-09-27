@@ -25,6 +25,9 @@ public class RunSession
 
     public int PlayerMaxHp { get; private set; }
     public int PlayerCurrentHp { get; private set; }
+    public BattleType PendingBattleType { get; private set; }
+    public PlayerSkillLoadout SkillLoadout { get; } =
+    new PlayerSkillLoadout();
 
     public float PlayerHpRate => PlayerMaxHp > 0
     ? (float)PlayerCurrentHp / PlayerMaxHp
@@ -65,6 +68,7 @@ public class RunSession
         CurrentExploreRoomId = string.Empty;
         PendingBattleRoomId = string.Empty;
         PendingBattleNodeId = string.Empty;
+        PendingBattleType = BattleType.Normal;
         BattlesWon = 0;
         ExploreMap = null;
 
@@ -72,6 +76,8 @@ public class RunSession
         ExploreReturnPosition = Vector3.zero;
         PlayerMaxHp = 100;
         PlayerCurrentHp = PlayerMaxHp;
+        SkillLoadout.Reset();
+
     }
 
     public bool IsNodeCompleted(string nodeId)
@@ -83,10 +89,14 @@ public class RunSession
     {
         completedNodes.Add(nodeId);
     }
-    public void StartPendingBattle(string roomId, string nodeId)
+    public void StartPendingBattle(
+    string roomId,
+    string nodeId,
+    BattleType battleType)
     {
         PendingBattleRoomId = roomId;
         PendingBattleNodeId = nodeId;
+        PendingBattleType = battleType;
     }
 
     public void CompletePendingBattle()
@@ -102,6 +112,7 @@ public class RunSession
 
         PendingBattleRoomId = string.Empty;
         PendingBattleNodeId = string.Empty;
+        PendingBattleType = BattleType.Normal;
     }
     public void RecordBattleVictory()
     {

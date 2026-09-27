@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07442b20860a4fb41b5f3657d001c785, type: 3}
-  m_Name: TestEnemy
-  m_EditorClassIdentifier: Assembly-CSharp::BattleEnemyDefinition
-  enemyName: enemy
-  maxHp: 50
-  attackPower: 4
-  attackCooldown: 2
+  m_Script: {fileID: 11500000, guid: be1aa8dc77f2bb24588cb2cc9559e022, type: 3}
+  m_Name: "\u6253\u64CA"
+  m_EditorClassIdentifier: Assembly-CSharp::BattleSkillDefinition
+  skillName: "\u6253\u64CA"
+  power: 25
+  directionSequence: 0000000000000000

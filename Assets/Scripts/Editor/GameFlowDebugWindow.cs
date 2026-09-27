@@ -5,6 +5,8 @@ using UnityEditor.SceneManagement;
 
 public class GameFlowDebugWindow : EditorWindow
 {
+    private BattleSkillDefinition testSkill;
+    private BattleSkillSlot testSkillSlot;
     private PlayerClassDefinition testClass;
     [MenuItem("ActiveTimeBattle/Game Flow Debug")]
     private static void Open()
@@ -49,7 +51,58 @@ public class GameFlowDebugWindow : EditorWindow
         {
             ChangeState(controller => controller.StartNewRun(testClass));
         }
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Runtime Skill Loadout", EditorStyles.boldLabel);
 
+        testSkill = (BattleSkillDefinition)EditorGUILayout.ObjectField(
+            "Test Skill",
+            testSkill,
+            typeof(BattleSkillDefinition),
+            false);
+
+        testSkillSlot = (BattleSkillSlot)EditorGUILayout.EnumPopup(
+            "Test Slot",
+            testSkillSlot);
+
+        if (GUILayout.Button("Add And Equip Skill"))
+        {
+            RunSession runSession = controller?.CurrentRunSession;
+
+            if (runSession == null || !runSession.IsActive)
+            {
+                Debug.LogWarning("Start a run before equipping skills.");
+            }
+            else if (testSkill == null)
+            {
+                Debug.LogWarning("Test skill is not assigned.");
+            }
+            else
+            {
+                runSession.SkillLoadout.AddOwnedSkill(testSkill);
+                runSession.SkillLoadout.EquipSkill(testSkillSlot, testSkill);
+            }
+        }
+
+        if (GUILayout.Button("Unequip Skill"))
+        {
+            controller?.CurrentRunSession?.SkillLoadout.UnequipSkill(testSkillSlot);
+        }
+
+        RunSession currentRun = controller?.CurrentRunSession;
+
+        if (currentRun != null)
+        {
+            BattleSkillDefinition equippedSkill =
+                currentRun.SkillLoadout.GetEquippedSkill(testSkillSlot);
+
+            EditorGUILayout.LabelField(
+                "Equipped Skill",
+                equippedSkill != null ? equippedSkill.SkillName : "None");
+
+            EditorGUILayout.LabelField(
+                "Owned Skill Count",
+                currentRun.SkillLoadout.OwnedSkills.Count.ToString());
+        }
         GUI.enabled = true;
 
         if (!Application.isPlaying)

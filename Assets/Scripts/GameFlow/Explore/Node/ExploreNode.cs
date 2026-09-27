@@ -152,14 +152,14 @@ public class ExploreNode : MonoBehaviour, IExploreInteractable
 
         if (runSession != null)
         {
-            runSession.StartPendingBattle(RoomController.RoomId, NodeId);
+            BattleType battleType = NodeType == ExploreNodeType.EliteBattle
+            ? BattleType.Elite
+            : BattleType.Normal;
 
-            ExplorePlayerController player = FindFirstObjectByType<ExplorePlayerController>();
-
-            if (player != null)
-            {
-                runSession.SetExploreReturnPosition(player.transform.position);
-            }
+            runSession.StartPendingBattle(
+                RoomController.RoomId,
+                NodeId,
+                battleType);
         }
 
         Debug.Log($"Start battle from node: {NodeId}, Type: {NodeType}");
